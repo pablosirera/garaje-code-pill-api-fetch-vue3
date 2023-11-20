@@ -1,5 +1,17 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
+import PostsList from './components/PostsList.vue'
+import { useFetch } from '@vueuse/core'
+
+const loadData = async () => {
+  const { isFetching, error, data } = await useFetch(
+    'https://jsonplaceholder.typicode.com/posts'
+  ).json()
+
+  console.log(data)
+}
+
+loadData()
 </script>
 
 <template>
@@ -11,7 +23,13 @@ import HelloWorld from './components/HelloWorld.vue'
     </div>
   </header>
 
-  <main>
-    <p>Test</p>
-  </main>
+  <Suspense>
+    <template #default>
+      <main>
+        <p>Test</p>
+        <PostsList style="height: 400px; overflow: scroll" />
+      </main>
+    </template>
+    <template #fallback> Loading... </template>
+  </Suspense>
 </template>
